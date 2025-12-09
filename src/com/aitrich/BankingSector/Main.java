@@ -1,5 +1,6 @@
 package com.aitrich.BankingSector;
 
+<<<<<<< HEAD
 import java.util.Scanner;
 
 public class Main {
@@ -80,5 +81,20 @@ public class Main {
         } while (choice != 5);
 
         sc.close();
+=======
+import java.math.BigDecimal;
+
+public class Main {
+    public static void main(String[] args) {
+
+        CustomerService service = new CustomerService();
+
+        Customer req = new Customer(
+                "Akshay", "A01", "akshay@gmail.com", "1234567890", "Thrissur"
+        );
+
+        Customer c = service.createCustomerWithAccount(req, AccountType.SAVINGS, new BigDecimal("10000"));
+        System.out.println(c);
+>>>>>>> afad0b852aeb26b18562dc1b18d9f4471487cf90
     }
 }
