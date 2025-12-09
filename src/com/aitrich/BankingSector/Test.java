@@ -1,6 +1,7 @@
 package com.aitrich.BankingSector;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class Test {
 
@@ -8,6 +9,7 @@ public class Test {
 
         AccountManagment bank = new AccountManagment();
         CustomerService customer = new CustomerService();
+        TransactionService transaction = new TransactionService(bank); // HAS-A relation
         Authentication auth = new Authentication();
         Scanner sc = new Scanner(System.in);
 
@@ -29,22 +31,25 @@ public class Test {
 
             boolean regOk = auth.register(newUser, newPass);
             if (!regOk) {
-                System.out.println("Registration failed. Username may already exist or file error.");
+                System.out.println("Registration failed.");
                 sc.close();
                 return;
             }
+
             System.out.println("Registration successful. Please login now.");
             username = newUser;
 
             System.out.print("Password for " + username + ": ");
             String pw = sc.nextLine();
+
             if (!auth.login(username, pw)) {
-                System.out.println("Login failed after registration.");
+                System.out.println("Login failed.");
                 sc.close();
                 return;
             }
 
         } else if (firstChoice == 2) {
+
             System.out.println("=== LOGIN ===");
             System.out.print("Username: ");
             username = sc.nextLine();
@@ -52,12 +57,13 @@ public class Test {
             String password = sc.nextLine();
 
             if (!auth.login(username, password)) {
-            	System.out.println("Invalid credentials. Access denied.");
+                System.out.println("Invalid credentials.");
                 sc.close();
                 return;
             }
+
         } else {
-            System.out.println("Invalid choice. Exiting.");
+            System.out.println("Invalid choice.");
             sc.close();
             return;
         }
@@ -76,10 +82,11 @@ public class Test {
             System.out.println("6. Deposit");
             System.out.println("7. Withdraw");
             System.out.println("8. Transfer");
-            System.out.println("9. View Transactions for Account");
+            System.out.println("9. View Transactions");
             System.out.println("10. Close Account");
             System.out.println("11. Exit");
             System.out.print("Enter choice: ");
+
             choice = sc.nextInt();
             sc.nextLine();
 
@@ -95,27 +102,28 @@ public class Test {
                         String phone = sc.nextLine();
                         System.out.print("Enter address: ");
                         String address = sc.nextLine();
-                        Customer c = customer.createCustomer(name, email, phone,address,null);
+
+                        Customer c = customer.createCustomer(name, email, phone, address, null);
                         System.out.println("Customer created: " + c);
                         break;
 
                     case 2:
-                    	System.out.print("Enter customer ID: ");
-                        String custId = sc.nextLine().trim();
+                        System.out.print("Enter customer ID: ");
+                        String custId = sc.nextLine();
 
                         Customer custForAcc = customer.getCustomer(custId);
                         if (custForAcc == null) {
-                            System.out.println("No such customer. Create the customer first.");
+                            System.out.println("No such customer.");
                             break;
                         }
 
                         System.out.print("Enter account type (SAVINGS/CURRENT): ");
-                        String typeStr = sc.nextLine().trim().toUpperCase();
+                        String typeStr = sc.nextLine().toUpperCase();
 
                         AccountType type;
                         try {
                             type = AccountType.valueOf(typeStr);
-                        } catch (IllegalArgumentException e) {
+                        } catch (Exception e) {
                             System.out.println("Invalid account type.");
                             break;
                         }
@@ -123,32 +131,33 @@ public class Test {
                         System.out.print("Enter initial balance: ");
                         double initBal = sc.nextDouble();
                         sc.nextLine();
+
                         Accounts acc = bank.openAccount(type, initBal);
                         custForAcc.setAccount(acc);
 
-                        System.out.println("Account created and linked to customer:");
-                        System.out.println("Customer: " + custForAcc);
+                        System.out.println("Account created & linked to customer.");
                         break;
+
                     case 3:
                         System.out.print("Enter customer ID: ");
                         String cid = sc.nextLine();
                         Customer cust = customer.getCustomer(cid);
-                        if (cust != null) {
+
+                        if (cust != null)
                             System.out.println("Customer: " + cust);
-                        } else {
-                            System.out.println("No such customer.");
-                        }
+                        else
+                            System.out.println("Customer not found.");
                         break;
 
                     case 4:
                         System.out.print("Enter account number: ");
                         String accView = sc.nextLine();
                         Accounts a = bank.getAccount(accView);
-                        if (a != null) {
+
+                        if (a != null)
                             System.out.println("Account: " + a);
-                        } else {
-                            System.out.println("No such account.");
-                        }
+                        else
+                            System.out.println("Account not found.");
                         break;
 
                     case 5:
@@ -158,55 +167,60 @@ public class Test {
                         System.out.println("Balance: " + bal);
                         break;
 
-//                    case 6:
-//                        System.out.print("Enter account number: ");
-//                        String accDep = sc.nextLine();
-//                        System.out.print("Enter amount to deposit: ");
-//                        double depAmt = sc.nextDouble();
-//                        sc.nextLine();
-//                        bank.deposit(accDep, depAmt);
-//                        System.out.println("Deposit successful.");
-//                        break;
+                    case 6:
+                        System.out.print("Enter account number: ");
+                        String accDep = sc.nextLine();
+                        System.out.print("Enter amount to deposit: ");
+                        double depAmt = sc.nextDouble();
+                        sc.nextLine();
 
-//                    case 7:
-//                        System.out.print("Enter account number: ");
-//                        String accW = sc.nextLine();
-//                        System.out.print("Enter amount to withdraw: ");
-//                        double wAmt = sc.nextDouble();
-//                        sc.nextLine();
-//                        bank.withdraw(accW, wAmt);
-//                        System.out.println("Withdrawal successful.");
-//                        break;
+                        transaction.deposit(accDep, depAmt);
+                        System.out.println("Deposit successful.");
+                        break;
 
-//                    case 8:
-//                        System.out.print("Enter FROM account: ");
-//                        String fromAcc = sc.nextLine();
-//                        System.out.print("Enter TO account: ");
-//                        String toAcc = sc.nextLine();
-//                        System.out.print("Enter amount: ");
-//                        double tAmt = sc.nextDouble();
-//                        sc.nextLine(); 
-//                        bank.transfer(fromAcc, toAcc, tAmt);
-//                        System.out.println("Transfer successful.");
-//                        break;
+                    case 7:
+                        System.out.print("Enter account number: ");
+                        String accW = sc.nextLine();
+                        System.out.print("Enter amount to withdraw: ");
+                        double wAmt = sc.nextDouble();
+                        sc.nextLine();
 
-//                    case 9:
-//                        System.out.print("Enter account number: ");
-//                        String accHist = sc.nextLine();
-//                        List<Transaction> txns = bank.getTransactionHistory(accHist);
-//                        if (txns == null || txns.isEmpty()) {
-//                            System.out.println("No transactions for this account.");
-//                        } else {
-//                            System.out.println("Transactions:");
-//                            for (Transaction t : txns) {
-//                                System.out.println("  " + t);
-//                            }
-//                        }
-//                        break;
+                        transaction.withdraw(accW, wAmt);
+                        System.out.println("Withdrawal successful.");
+                        break;
+
+                    case 8:
+                        System.out.print("Enter FROM account: ");
+                        String fromAcc = sc.nextLine();
+                        System.out.print("Enter TO account: ");
+                        String toAcc = sc.nextLine();
+                        System.out.print("Enter amount: ");
+                        double tAmt = sc.nextDouble();
+                        sc.nextLine();
+
+                        transaction.transfer(fromAcc, toAcc, tAmt);
+                        System.out.println("Transfer successful.");
+                        break;
+
+                    case 9:
+                        System.out.print("Enter account number: ");
+                        String accHist = sc.nextLine();
+
+                        List<Transaction> txns = transaction.getTransactionHistory(accHist);
+
+                        if (txns.isEmpty()) {
+                            System.out.println("No transactions found.");
+                        } else {
+                            System.out.println("Transactions:");
+                            for (Transaction t : txns) {
+                                System.out.println("  " + t);
+                            }
+                        }
+                        break;
 
                     case 10:
                         System.out.print("Enter Account Number: ");
-                        String accNum = sc.nextLine().trim();
+                        String accNum = sc.nextLine();
                         bank.closeAccount(accNum);
                         break;
 
