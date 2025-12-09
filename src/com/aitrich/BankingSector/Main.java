@@ -1,12 +1,54 @@
 package com.aitrich.BankingSector;
 
 <<<<<<< HEAD
+import java.util.List;
+=======
+<<<<<<< HEAD
 import java.util.Scanner;
+>>>>>>> 9fc7499426b1f7c7427813fe9665d8f32687e91b
 
 public class Main {
 
     public static void main(String[] args) {
 
+<<<<<<< HEAD
+        TransactionService service = new TransactionService();
+
+        // ----- TESTING DEPOSIT -----
+        service.deposit("ACC1001", 5000.0, "John");
+
+        // ----- TESTING WITHDRAW -----
+        service.withdraw("ACC1001", 2000.0, "John");
+
+        // ----- TESTING TRANSFER -----
+        service.transfer("ACC1001", "ACC2002", 1500.0, "John");
+
+        // ----- TEST: HISTORY FOR ACC1001 -----
+        System.out.println("---- Transaction History for ACC1001 ----");
+        List<Transaction> history1 = service.getTransactionHistory("ACC1001");
+        for (Transaction t : history1) {
+            System.out.println(
+                    t.getType() + " | " +
+                    t.getAmount() + " | " +
+                    "From: " + t.getFromAccount() + " | " +
+                    "To: " + t.getToAccount() + " | " +
+                    "Time: " + t.getTimestamp()
+            );
+        }
+
+        // ----- TEST: HISTORY FOR ACC2002 -----
+        System.out.println("\n---- Transaction History for ACC2002 ----");
+        List<Transaction> history2 = service.getTransactionHistory("ACC2002");
+        for (Transaction t : history2) {
+            System.out.println(
+                    t.getType() + " | " +
+                    t.getAmount() + " | " +
+                    "From: " + t.getFromAccount() + " | " +
+                    "To: " + t.getToAccount() + " | " +
+                    "Time: " + t.getTimestamp()
+            );
+        }
+=======
         AccountManagment bank = new AccountManagment();
         Scanner sc = new Scanner(System.in);  
 
@@ -96,5 +138,6 @@ public class Main {
         Customer c = service.createCustomerWithAccount(req, AccountType.SAVINGS, new BigDecimal("10000"));
         System.out.println(c);
 >>>>>>> afad0b852aeb26b18562dc1b18d9f4471487cf90
+>>>>>>> 9fc7499426b1f7c7427813fe9665d8f32687e91b
     }
 }
