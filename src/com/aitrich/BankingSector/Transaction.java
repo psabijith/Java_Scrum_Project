@@ -2,6 +2,7 @@ package com.aitrich.BankingSector;
 
 public class Transaction {
 
+<<<<<<< HEAD
     private String transactionId;
     private String accountNumber;
     private String fromAccount;
@@ -33,4 +34,6 @@ public class Transaction {
     public String getType() { return type; }
     public String getInitiatedBy() { return initiatedBy; }
     public String getTimestamp() { return timestamp; }
+=======
+>>>>>>> 9fc7499426b1f7c7427813fe9665d8f32687e91b
 }
