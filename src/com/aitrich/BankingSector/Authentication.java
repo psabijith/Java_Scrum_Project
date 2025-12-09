@@ -1,5 +1,9 @@
 package com.aitrich.BankingSector;
 
+<<<<<<< HEAD
+public class Authentication {
+
+=======
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -100,4 +104,5 @@ public class Authentication {
             return false;
         }
     }
+>>>>>>> 9fc7499426b1f7c7427813fe9665d8f32687e91b
 }
